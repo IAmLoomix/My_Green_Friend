@@ -361,7 +361,7 @@
                             <div class="text-lg font-bold text-green-700 mt-2">Мой зелёный друг</div>
                         </div>
                         <p class="text-sm text-gray-500">Школьный проект "Полёт"</p>
-                        <p class="text-xs text-gray-400 mt-2">Версия 0.3.0</p>
+                        <p class="text-xs text-gray-400 mt-2">Версия 0.5.0</p>
                     </div>
                 </div>
             </div>
@@ -747,45 +747,65 @@
                         <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>Типы освещения для растений
                     </h3>
 
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-gray-500 mt-1 mr-3"></div>
-                            <div>
-                                <h4 class="font-medium text-gray-700">Очень темно</h4>
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Очень темно -->
+                        <div class="flex flex-col sm:flex-row sm:items-start">
+                            <div class="flex items-center mb-2 sm:mb-0 sm:mr-3">
+                                <div class="w-3 h-3 rounded-full bg-gray-500 flex-shrink-0"></div>
+                                <h4 class="font-medium text-gray-700 ml-2 sm:ml-0 sm:hidden">Очень темно</h4>
+                            </div>
+                            <div class="sm:flex-1">
+                                <h4 class="font-medium text-gray-700 hidden sm:block">Очень темно</h4>
                                 <p class="text-sm text-gray-600">Только для самых теневыносливых растений (сансевиерия,
                                     замиокулькас)</p>
                             </div>
                         </div>
 
-                        <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-gray-400 mt-1 mr-3"></div>
-                            <div>
-                                <h4 class="font-medium text-gray-700">Тускло</h4>
+                        <!-- Тускло -->
+                        <div class="flex flex-col sm:flex-row sm:items-start">
+                            <div class="flex items-center mb-2 sm:mb-0 sm:mr-3">
+                                <div class="w-3 h-3 rounded-full bg-gray-400 flex-shrink-0"></div>
+                                <h4 class="font-medium text-gray-700 ml-2 sm:ml-0 sm:hidden">Тускло</h4>
+                            </div>
+                            <div class="sm:flex-1">
+                                <h4 class="font-medium text-gray-700 hidden sm:block">Тускло</h4>
                                 <p class="text-sm text-gray-600">Для тенелюбивых растений (папоротники, филодендроны)
                                 </p>
                             </div>
                         </div>
 
-                        <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-yellow-400 mt-1 mr-3"></div>
-                            <div>
-                                <h4 class="font-medium text-gray-700">Средне</h4>
+                        <!-- Средне -->
+                        <div class="flex flex-col sm:flex-row sm:items-start">
+                            <div class="flex items-center mb-2 sm:mb-0 sm:mr-3">
+                                <div class="w-3 h-3 rounded-full bg-yellow-400 flex-shrink-0"></div>
+                                <h4 class="font-medium text-gray-700 ml-2 sm:ml-0 sm:hidden">Средне</h4>
+                            </div>
+                            <div class="sm:flex-1">
+                                <h4 class="font-medium text-gray-700 hidden sm:block">Средне</h4>
                                 <p class="text-sm text-gray-600">Подходит большинству комнатных растений</p>
                             </div>
                         </div>
 
-                        <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-yellow-500 mt-1 mr-3"></div>
-                            <div>
-                                <h4 class="font-medium text-gray-700">Ярко</h4>
+                        <!-- Ярко -->
+                        <div class="flex flex-col sm:flex-row sm:items-start">
+                            <div class="flex items-center mb-2 sm:mb-0 sm:mr-3">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 flex-shrink-0"></div>
+                                <h4 class="font-medium text-gray-700 ml-2 sm:ml-0 sm:hidden">Ярко</h4>
+                            </div>
+                            <div class="sm:flex-1">
+                                <h4 class="font-medium text-gray-700 hidden sm:block">Ярко</h4>
                                 <p class="text-sm text-gray-600">Для светолюбивых растений (суккуленты, цитрусовые)</p>
                             </div>
                         </div>
 
-                        <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-red-400 mt-1 mr-3"></div>
-                            <div>
-                                <h4 class="font-medium text-gray-700">Очень ярко</h4>
+                        <!-- Очень ярко -->
+                        <div class="flex flex-col sm:flex-row sm:items-start">
+                            <div class="flex items-center mb-2 sm:mb-0 sm:mr-3">
+                                <div class="w-3 h-3 rounded-full bg-red-400 flex-shrink-0"></div>
+                                <h4 class="font-medium text-gray-700 ml-2 sm:ml-0 sm:hidden">Очень ярко</h4>
+                            </div>
+                            <div class="sm:flex-1">
+                                <h4 class="font-medium text-gray-700 hidden sm:block">Очень ярко</h4>
                                 <p class="text-sm text-gray-600">Может потребоваться притенение в самые солнечные часы
                                 </p>
                             </div>
@@ -849,7 +869,8 @@
                                 <!-- Описание выбранного вида -->
                                 <div x-show="selectedSpecies && selectedSpecies.description"
                                     class="mt-3 p-3 bg-green-50 rounded-lg">
-                                    <p class="text-sm text-green-800" x-text="selectedSpecies?.description || ''"></p>
+                                    <p class="text-sm text-green-800" x-text="selectedSpecies?.description || ''">
+                                    </p>
                                     <p class="text-sm font-medium text-green-900 mt-1">
                                         Рекомендуемый полив: каждые
                                         <span x-text="selectedSpecies?.watering_days || '?'"></span> дней
@@ -901,7 +922,8 @@
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-6">
                             <div>
-                                <h2 class="text-2xl font-bold text-gray-800" x-text="selectedPlant.custom_name"></h2>
+                                <h2 class="text-2xl font-bold text-gray-800" x-text="selectedPlant.custom_name">
+                                </h2>
                                 <p class="text-gray-600" x-text="selectedPlant.species_name"></p>
                             </div>
                             <button @click="showDetailsModal = false" class="text-gray-400 hover:text-gray-600">
@@ -1010,7 +1032,8 @@
                                                 <i class="fas fa-seedling mr-2 text-sm"></i>Описание
                                             </h4>
                                             <p class="text-gray-700 text-sm sm:text-base"
-                                                x-text="currentPlantInfo?.description || 'Описание отсутствует'"></p>
+                                                x-text="currentPlantInfo?.description || 'Описание отсутствует'">
+                                            </p>
                                         </div>
                                         <div class="space-y-2">
                                             <h4 class="font-bold text-green-800 text-sm sm:text-base flex items-center">
@@ -1018,7 +1041,8 @@
                                                     class="fas fa-temperature-high mr-2 text-sm"></i>Температура/освещение
                                             </h4>
                                             <p class="text-gray-700 text-sm sm:text-base"
-                                                x-text="currentPlantInfo?.temperature || 'Информация отсутствует'"></p>
+                                                x-text="currentPlantInfo?.temperature || 'Информация отсутствует'">
+                                            </p>
                                         </div>
                                         <div class="space-y-2">
                                             <h4 class="font-bold text-green-800 text-sm sm:text-base flex items-center">
@@ -1033,7 +1057,8 @@
                                                 <i class="fas fa-spa mr-2 text-sm"></i>Подкормка
                                             </h4>
                                             <p class="text-gray-700 text-sm sm:text-base"
-                                                x-text="currentPlantInfo?.feeding || 'Информация отсутствует'"></p>
+                                                x-text="currentPlantInfo?.feeding || 'Информация отсутствует'">
+                                            </p>
                                         </div>
                                         <div class="md:col-span-2 space-y-2">
                                             <h4 class="font-bold text-green-800 text-sm sm:text-base flex items-center">
@@ -1073,9 +1098,11 @@
 
             <!-- Футер -->
             <footer class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
-                <p>🌿 Мой зелёный друг • Школьный проект "Полёт" • Версия 0.3.0</p>
+                <p>🌿 Мой зелёный друг • Школьный проект "Полёт"</p>
+                <p>Версия 0.5.0</p>
                 <p>Уведомления: ежедневно в 10:00</p>
-                <p class="mt-2">Растений в энциклопедии: <span x-text="plantEncyclopedia.length"></span> видов</p>
+                <p class="mt-2">Растений в энциклопедии: <span x-text="plantEncyclopedia.length"></span> видов
+                </p>
             </footer>
         </div>
 
@@ -1622,10 +1649,10 @@
                             alert('Сначала определите пользователя');
                             return;
                         }
-
+ 
                         try {
                             this.notificationStatus = 'Создаю профиль...';
-
+ 
                             const userData = {
                                 telegram_id: this.user.id,
                                 username: this.user.username || '',
@@ -1633,13 +1660,13 @@
                                 last_name: this.user.last_name || '',
                                 created_at: new Date().toISOString()
                             };
-
+ 
                             console.log('Создаю пользователя:', userData);
-
+ 
                             const { error } = await window.supabase
                                 .from('users')
                                 .insert([userData]);
-
+ 
                             if (error) {
                                 console.error('Ошибка:', error);
                                 alert(`Ошибка: ${error.message}\n\nПроверьте RLS политики в Supabase.`);
@@ -2466,6 +2493,7 @@
                 };
             }
         </script>
+    </div>
 </body>
 
 </html>
