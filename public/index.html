@@ -333,18 +333,18 @@
                         </div>
                     </button>
 
-                    <!-- Будущий раздел 1 -->
-                    <button @click="changePage('future1')" :class="{'active-page': currentPage === 'future1'}"
+                    <!-- Зелёный маркетплнйс -->
+                    <button @click="changePage('marketplace')" :class="{'active-page': currentPage === 'marketplace'}"
                         class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 transition flex items-center">
-                        <i class="fas fa-calendar-alt mr-3 text-blue-600"></i>
+                        <i class="fas fa-shopping-cart mr-3 text-blue-600"></i>
                         <div>
                             <div class="font-medium">Зелёный маркетплейс</div>
-                            <div class="text-sm text-gray-500">Скоро будет доступно</div>
+                            <div class="text-sm text-gray-500">Почва, удобрения и аксессуары</div>
                         </div>
                     </button>
 
                     <!-- Измеритель освещённости -->
-                    <button @click="changePage('light')" :class="{'active-page': currentPage === 'light'}"
+                    <button @click="changePage('lightmeter')" :class="{'active-page': currentPage === 'lightmeter'}"
                         class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 transition flex items-center">
                         <i class="fas fa-sun mr-3 text-yellow-600"></i>
                         <div>
@@ -522,24 +522,153 @@
                 </div>
             </div>
 
-            <!-- Страница "Будущий раздел 1" -->
-            <div x-show="currentPage === 'future1'">
-                <div class="text-center py-12">
-                    <div class="coming-soon p-8 rounded-2xl mb-8">
-                        <i class="fas fa-calendar-alt text-6xl text-blue-300 mb-4"></i>
-                        <h2 class="text-2xl font-bold text-gray-700 mb-2">Календарь ухода</h2>
-                        <p class="text-gray-600 mb-6">Этот раздел скоро появится!</p>
-                        <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full">
-                            <i class="fas fa-tools mr-2"></i>
-                            <span>В разработке</span>
-                        </div>
+            <!-- Страница "Маркетплейс" -->
+            <div x-show="currentPage === 'marketplace'">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-shopping-cart text-blue-600 mr-2"></i>Зелёный маркетплейс
+                    </h2>
+                    <p class="text-gray-600 mb-4">Качественные товары для ухода за вашими растениями</p>
+
+                    <div class="relative mb-6">
+                        <input type="text" x-model="marketplaceSearch" placeholder="Поиск товаров..."
+                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
-                    <p class="text-gray-500">Следите за обновлениями приложения</p>
+
+                    <!-- Фильтры по категориям -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button @click="marketplaceFilter = 'all'"
+                            :class="marketplaceFilter === 'all' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-gray-100 text-gray-800 border-gray-300'"
+                            class="px-3 py-1 rounded-full text-sm font-medium border transition">
+                            Все товары
+                        </button>
+                        <button @click="marketplaceFilter = 'soil'"
+                            :class="marketplaceFilter === 'soil' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-gray-100 text-gray-800 border-gray-300'"
+                            class="px-3 py-1 rounded-full text-sm font-medium border transition">
+                            <i class="fas fa-tree mr-1"></i>Грунт
+                        </button>
+                        <button @click="marketplaceFilter = 'fertilizer'"
+                            :class="marketplaceFilter === 'fertilizer' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : 'bg-gray-100 text-gray-800 border-gray-300'"
+                            class="px-3 py-1 rounded-full text-sm font-medium border transition">
+                            <i class="fas fa-flask mr-1"></i>Удобрения
+                        </button>
+                        <button @click="marketplaceFilter = 'pot'"
+                            :class="marketplaceFilter === 'pot' ? 'bg-purple-100 text-purple-800 border-purple-300' : 'bg-gray-100 text-gray-800 border-gray-300'"
+                            class="px-3 py-1 rounded-full text-sm font-medium border transition">
+                            <i class="fas fa-utensils mr-1"></i>Горшки
+                        </button>
+                        <button @click="marketplaceFilter = 'accessory'"
+                            :class="marketplaceFilter === 'accessory' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-gray-100 text-gray-800 border-gray-300'"
+                            class="px-3 py-1 rounded-full text-sm font-medium border transition">
+                            <i class="fas fa-toolbox mr-1"></i>Аксессуары
+                        </button>
+                    </div>
+                </div>
+
+                <div x-show="marketplaceFilter.startsWith('related-') && relatedProductsFilter"
+                    class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-medium text-blue-800">
+                                <i class="fas fa-link mr-2"></i>
+                                Товары для: <span x-text="getPlantNameById(relatedProductsFilter)"></span>
+                            </p>
+                            <p class="text-sm text-blue-600 mt-1">
+                                Показано <span x-text="filteredMarketplaceProducts.length"></span> товаров
+                            </p>
+                        </div>
+                        <button @click="clearRelatedFilter()"
+                            class="text-blue-600 hover:text-blue-800 px-3 py-1 border border-blue-300 rounded-lg text-sm">
+                            Показать все товары
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточки товаров -->
+                <div x-show="!loadingMarketplace && filteredMarketplaceProducts.length > 0"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <template x-for="product in filteredMarketplaceProducts" :key="product.id">
+                        <div
+                            class="bg-white rounded-xl shadow-sm p-4 border border-gray-200 hover:shadow-md transition">
+                            <!-- Картинка товара -->
+                            <div
+                                class="mb-3 h-40 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                <template x-if="product.image_url">
+                                    <img :src="product.image_url" :alt="product.name"
+                                        class="w-full h-full object-cover">
+                                </template>
+                                <template x-if="!product.image_url">
+                                    <div class="text-gray-400 text-4xl">
+                                        <i :class="getProductIcon(product.category)"></i>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Название и категория -->
+                            <h3 class="font-bold text-gray-800 text-sm mb-2" x-text="product.name"></h3>
+                            <div class="mb-2">
+                                <span class="inline-block px-2 py-1 text-xs rounded-full"
+                                    :class="getCategoryClass(product.category)">
+                                    <span x-text="getCategoryName(product.category)"></span>
+                                </span>
+                            </div>
+
+                            <!-- Описание -->
+                            <p class="text-gray-600 text-xs mb-3 line-clamp-2" x-text="product.description"></p>
+
+                            <!-- Цена -->
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-bold text-blue-700"
+                                    x-text="product.price_range || 'Цена по ссылке'"></span>
+                                <span class="text-xs text-gray-500" x-text="product.tags?.join(', ') || ''"></span>
+                            </div>
+
+                            <!-- Кнопка покупки -->
+                            <a :href="product.external_url" target="_blank"
+                                class="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-center font-medium py-2 px-4 rounded-lg transition transform hover:scale-[1.02]">
+                                <i class="fas fa-external-link-alt mr-2"></i>Купить на маркетплейсе
+                            </a>
+
+                            <!-- Подходит для растений (если есть) -->
+                            <div x-show="product.attached_to_plants && product.attached_to_plants.length > 0"
+                                class="mt-3 pt-3 border-t border-gray-100">
+                                <p class="text-xs text-gray-500 mb-1">Подходит для:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <template x-for="plantId in product.attached_to_plants.slice(0, 3)" :key="plantId">
+                                        <span class="px-2 py-1 bg-green-50 text-green-700 text-xs rounded">
+                                            <span x-text="getPlantNameById(plantId)"></span>
+                                        </span>
+                                    </template>
+                                    <span x-show="product.attached_to_plants.length > 3"
+                                        class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
+                                        +<span x-text="product.attached_to_plants.length - 3"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Если нет товаров -->
+                <div x-show="!loadingMarketplace && filteredMarketplaceProducts.length === 0" class="text-center py-12">
+                    <div class="mb-6">
+                        <i class="fas fa-shopping-cart text-5xl text-gray-300"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">Товары не найдены</h3>
+                    <p class="text-gray-500">Попробуйте изменить фильтр</p>
+                </div>
+
+                <!-- Загрузка -->
+                <div x-show="loadingMarketplace" class="text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600">
+                    </div>
+                    <p class="mt-4 text-gray-600">Загружаем товары...</p>
                 </div>
             </div>
 
             <!-- Страница "Оценка освещённости" -->
-            <div x-show="currentPage === 'light'">
+            <div x-show="currentPage === 'lightmeter'">
                 <div class="light-meter-card p-6 mb-6">
                     <h2 class="text-xl font-semibold text-white mb-2">
                         <i class="fas fa-sun mr-2 text-yellow-400"></i>Оценка освещённости
@@ -646,7 +775,7 @@
                         </div>
 
                         <div class="flex items-start">
-                            <div class="w-3 h-3 rounded-full bg-orange-400 mt-1 mr-3"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500 mt-1 mr-3"></div>
                             <div>
                                 <h4 class="font-medium text-gray-700">Ярко</h4>
                                 <p class="text-sm text-gray-600">Для светолюбивых растений (суккуленты, цитрусовые)</p>
@@ -836,6 +965,10 @@
                                 class="w-full mt-2 bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center transition">
                                 <i class="fas fa-book mr-2"></i>Открыть в энциклопедии
                             </button>
+                            <button @click="showRelatedProducts(selectedPlant.species_id)"
+                                class="w-full mt-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center transition">
+                                <i class="fas fa-shopping-cart mr-2"></i>Сопутствующие товары
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -953,6 +1086,13 @@
                     // Добавляем $nextTick в контекст
                     $nextTick: (fn) => setTimeout(fn, 0),
 
+                    // Магазин
+                    marketplaceProducts: [],
+                    marketplaceFilter: 'all',
+                    marketplaceSearch: '',
+                    loadingMarketplace: false,
+                    relatedProductsFilter: null,
+
                     // Состояние приложения
                     loading: true,
                     user: null,
@@ -1031,6 +1171,9 @@
                             console.log('5. Загружаю энциклопедию из БД...');
                             await this.loadEncyclopedia();
 
+                            console.log('6. Загружаю товары маркетплейса...');
+                            await this.loadMarketplaceProducts();
+
                             console.log('🎉 Приложение успешно запущено!');
 
                         } catch (error) {
@@ -1047,22 +1190,48 @@
 
                     // Навигация
                     changePage(page) {
+                        console.log('🔄 Переход на страницу:', page, 'с текущей:', this.currentPage);
+
                         this.currentPage = page;
                         this.isMenuOpen = false;
 
-                        // При переходе в энциклопедию, сбрасываем поиск
+                        // Сброс поиска в энциклопедии
                         if (page === 'encyclopedia') {
                             this.encyclopediaSearch = '';
                         }
 
-                        // При переходе на страницу освещённости, сбрасываем результат
-                        if (page === 'light') {
+                        // Сброс результата освещённости
+                        if (page === 'lightmeter') {
                             this.lightResult = null;
                         }
 
-                        // При переходе в растения, обновляем список если нужно
+                        // Обновление списка растений
                         if (page === 'plants') {
                             this.loadUserPlants();
+                        }
+
+                        // ↓↓↓ ВАЖНО: Правильный сброс фильтров маркетплейса ↓↓↓
+                        if (page === 'marketplace') {
+                            // Проверяем, переходим ли мы через кнопку в меню
+                            const isFromMenuClick = !this.relatedProductsFilter;
+
+                            if (isFromMenuClick) {
+                                // Если это прямой переход из меню - сбрасываем все фильтры
+                                console.log('🔄 Сброс фильтров маркетплейса (переход из меню)');
+                                this.marketplaceFilter = 'all';
+                                this.marketplaceSearch = '';
+                                this.relatedProductsFilter = null;
+                            } else {
+                                // Если перешли через "Сопутствующие товары" - сохраняем фильтр
+                                console.log('🔗 Сохранение фильтра для связанных товаров:', this.relatedProductsFilter);
+                            }
+                        } else {
+                            // При переходе на ЛЮБУЮ другую страницу сбрасываем фильтр связанных товаров
+                            // Но только если он был установлен
+                            if (this.relatedProductsFilter) {
+                                console.log('🗑️ Сброс relatedProductsFilter при переходе на страницу:', page);
+                                this.relatedProductsFilter = null;
+                            }
                         }
                     },
 
@@ -1071,8 +1240,8 @@
                         const titles = {
                             'plants': 'Мои растения',
                             'encyclopedia': 'Энциклопедия',
-                            'future1': 'Зелёный маркетплейс',
-                            'light': 'Оценка освещённости'
+                            'marketplace': 'Зелёный маркетплейс',
+                            'lightmeter': 'Оценка освещённости'
                         };
                         return titles[page] || 'Мой зелёный друг';
                     },
@@ -2057,28 +2226,55 @@
 
                     // Показать детали растения
                     async showPlantDetails(plantId) {
-                        const plant = this.plants.find(p => p.id === plantId);
-                        if (!plant) return;
-
-                        this.selectedPlant = plant;
-
-                        // Загружаем историю поливов
                         try {
-                            const { data, error } = await window.supabase
-                                .from('watering_history')
-                                .select('*')
-                                .eq('plant_id', plantId)
-                                .order('watered_date', { ascending: false })
-                                .limit(10);
+                            console.log('🔄 showPlantDetails вызван с ID:', plantId);
 
-                            if (!error) {
-                                this.wateringHistory = data;
+                            // Ищем растение с другим именем переменной (не plant)
+                            const targetPlant = this.plants.find(p => p.id === plantId);
+
+                            if (!targetPlant) {
+                                console.error('❌ Растение не найдено с ID:', plantId);
+                                return;
                             }
-                        } catch (error) {
-                            console.error('Ошибка загрузки истории:', error);
-                        }
 
-                        this.showDetailsModal = true;
+                            console.log('🌿 Найдено растение:', targetPlant);
+                            console.log('📋 Все поля растения:', Object.keys(targetPlant));
+
+                            // Сохраняем в selectedPlant
+                            this.selectedPlant = { ...targetPlant };
+
+                            // Проверяем species_id
+                            if (!this.selectedPlant.species_id && this.selectedPlant.plant_species) {
+                                this.selectedPlant.species_id = this.selectedPlant.plant_species.id;
+                                console.log('✅ species_id установлен из plant_species:', this.selectedPlant.species_id);
+                            }
+
+                            console.log('✅ selectedPlant установлен:', this.selectedPlant);
+
+                            // Загружаем историю поливов (если нужно)
+                            try {
+                                const { data, error } = await window.supabase
+                                    .from('watering_history')
+                                    .select('*')
+                                    .eq('plant_id', plantId)
+                                    .order('watered_date', { ascending: false })
+                                    .limit(10);
+
+                                if (!error && data) {
+                                    this.wateringHistory = data;
+                                    console.log('📜 История поливов загружена:', data.length, 'записей');
+                                }
+                            } catch (historyError) {
+                                console.warn('⚠️ Ошибка загрузки истории поливов:', historyError);
+                            }
+
+                            // Показываем модальное окно
+                            this.showDetailsModal = true;
+                            console.log('✅ Модальное окно открыто');
+
+                        } catch (error) {
+                            console.error('💥 Критическая ошибка в showPlantDetails:', error);
+                        }
                     },
 
                     // Удаление растения
@@ -2105,6 +2301,126 @@
                             console.error('Ошибка удаления растения:', error);
                             this.notificationStatus = 'Ошибка при удалении растения';
                         }
+                    },
+
+                    // Загрузка товаров маркетплейса
+                    async loadMarketplaceProducts() {
+                        this.loadingMarketplace = true;
+                        try {
+                            const { data, error } = await window.supabase
+                                .from('marketplace_products')
+                                .select('*')
+                                .eq('is_active', true)
+                                .order('created_at', { ascending: false });
+
+                            if (error) throw error;
+
+                            this.marketplaceProducts = data || [];
+                            console.log(`🛒 Загружено товаров: ${this.marketplaceProducts.length}`);
+                        } catch (error) {
+                            console.error('Ошибка загрузки товаров:', error);
+                            // Демо-данные на случай ошибки
+                        } finally {
+                            this.loadingMarketplace = false;
+                        }
+                    },
+
+                    // Фильтрация товаров
+                    get filteredMarketplaceProducts() {
+                        if (!this.marketplaceProducts) return [];
+
+                        let filtered = this.marketplaceProducts;
+
+                        // Фильтр по категории
+                        if (this.marketplaceFilter !== 'all') {
+                            // Проверяем, это обычный фильтр или фильтр по связанным товарам
+                            if (this.marketplaceFilter.startsWith('related-')) {
+                                // Фильтр по связанным товарам
+                                const plantId = parseInt(this.marketplaceFilter.replace('related-', ''));
+                                filtered = filtered.filter(p =>
+                                    p.attached_to_plants &&
+                                    p.attached_to_plants.includes(plantId.toString())
+                                );
+
+                                // Если нет связанных товаров, показываем все товары с уведомлением
+                                if (filtered.length === 0) {
+                                    this.notificationStatus = `Для этого растения пока нет специальных товаров. Показаны все доступные.`;
+                                    setTimeout(() => this.notificationStatus = '', 3000);
+                                }
+                            } else {
+                                // Обычный фильтр по категории
+                                filtered = filtered.filter(p => p.category === this.marketplaceFilter);
+                            }
+                        }
+
+                        // Поиск по названию и описанию (если не в режиме связанных товаров)
+                        if (this.marketplaceSearch && this.marketplaceSearch.trim() &&
+                            !this.marketplaceFilter.startsWith('related-')) {
+                            const searchTerm = this.marketplaceSearch.toLowerCase();
+                            filtered = filtered.filter(p =>
+                                p.name.toLowerCase().includes(searchTerm) ||
+                                (p.description && p.description.toLowerCase().includes(searchTerm)) ||
+                                (p.tags && p.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+                            );
+                        }
+
+                        return filtered;
+                    },
+
+                    // Вспомогательные функции для отображения
+                    getProductIcon(category) {
+                        const icons = {
+                            'soil': 'fas fa-tree',
+                            'fertilizer': 'fas fa-flask',
+                            'pot': 'fas fa-utensils',
+                            'accessory': 'fas fa-toolbox'
+                        };
+                        return icons[category] || 'fas fa-shopping-cart';
+                    },
+
+                    getCategoryClass(category) {
+                        const classes = {
+                            'soil': 'bg-green-100 text-green-800',
+                            'fertilizer': 'bg-yellow-100 text-yellow-800',
+                            'pot': 'bg-purple-100 text-purple-800',
+                            'accessory': 'bg-red-100 text-red-800'
+                        };
+                        return classes[category] || 'bg-gray-100 text-gray-800';
+                    },
+
+                    getCategoryName(category) {
+                        const names = {
+                            'soil': 'Грунт',
+                            'fertilizer': 'Удобрение',
+                            'pot': 'Горшок',
+                            'accessory': 'Аксессуар'
+                        };
+                        return names[category] || 'Товар';
+                    },
+
+                    getPlantNameById(plantId) {
+                        const plant = this.plantSpecies?.find(p => p.id == plantId);
+                        return plant ? plant.name.split(' ')[0] : `Растение ${plantId}`;
+                    },
+
+                    showRelatedProducts(speciesId) {
+                        this.showDetailsModal = false;
+                        this.currentPage = 'marketplace';
+                        this.marketplaceFilter = 'related-' + speciesId; // Устанавливаем специальный фильтр
+                        this.relatedProductsFilter = speciesId;
+
+                        // Прокручиваем к началу маркетплейса
+                        setTimeout(() => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            this.notificationStatus = `Показаны товары для ${this.getPlantNameById(speciesId)}`;
+                            setTimeout(() => this.notificationStatus = '', 3000);
+                        }, 100);
+                    },
+
+                    highlightRelatedProducts(speciesId) {
+                        // Можно добавить анимацию или фильтрацию для связанных товаров
+                        this.notificationStatus = `Показаны товары для выбранного растения`;
+                        setTimeout(() => this.notificationStatus = '', 3000);
                     },
 
                     // Вспомогательные функции
