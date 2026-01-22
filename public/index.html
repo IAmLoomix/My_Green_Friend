@@ -352,6 +352,16 @@
                             <div class="text-sm text-gray-500">Измерьте свет для растений</div>
                         </div>
                     </button>
+
+                    <!-- Доктор растений -->
+                    <button @click="changePage('doctor')" :class="{'active-page': currentPage === 'doctor'}"
+                        class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 transition flex items-center">
+                        <i class="fas fa-stethoscope mr-3 text-red-600"></i>
+                        <div>
+                            <div class="font-medium">Доктор растений</div>
+                            <div class="text-sm text-gray-500">Диагностика проблем и лечение</div>
+                        </div>
+                    </button>
                 </div>
 
                 <div class="mt-12 pt-6 border-t border-gray-200">
@@ -814,6 +824,131 @@
                 </div>
             </div>
 
+            <!-- Страница "Доктор растений" -->
+            <div x-show="currentPage === 'doctor'">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-stethoscope text-red-600 mr-2"></i>Доктор растений
+                    </h2>
+                    <p class="text-gray-600 mb-4">Ответьте на несколько вопросов для диагностики проблемы</p>
+                </div>
+
+                <!-- Состояние: начало -->
+                <div x-show="!currentQuestion && !diagnosisResult" class="text-center py-12">
+                    <div class="mb-6">
+                        <i class="fas fa-seedling text-5xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">Начнем диагностику</h3>
+                    <p class="text-gray-500 mb-6">Мы зададим 3-5 вопросов чтобы определить проблему</p>
+                    <button @click="startDiagnosis()"
+                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg">
+                        Начать диагностику
+                    </button>
+                </div>
+
+                <!-- Состояние: вопрос -->
+                <div x-show="currentQuestion && !diagnosisResult">
+                    <!-- Прогресс -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm text-gray-600 mb-1">
+                            <span>Вопрос <span x-text="currentQuestionNumber"></span></span>
+                            <span>~ осталось <span x-text="estimatedQuestionsLeft"></span></span>
+                        </div>
+                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 rounded-full transition-all duration-300"
+                                :style="'width: ' + diagnosisProgress + '%'"></div>
+                        </div>
+                    </div>
+
+                    <!-- Вопрос -->
+                    <div class="mb-6 p-5 bg-white rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            <span x-text="currentQuestionNumber"></span>. <span
+                                x-text="currentQuestion.question_text"></span>
+                        </h3>
+
+                        <!-- Варианты ответов -->
+                        <div class="space-y-3">
+                            <template x-for="answer in currentQuestionAnswers" :key="answer.id">
+                                <button @click="selectAnswer(answer)"
+                                    class="w-full p-4 text-left bg-gray-50 hover:bg-green-50 border border-gray-300 hover:border-green-400 rounded-lg transition group">
+                                    <div class="font-medium text-gray-800" x-text="answer.answer_text"></div>
+                                    <div
+                                        class="mt-1 text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition">
+                                        Нажмите для выбора →
+                                    </div>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка назад -->
+                    <button x-show="questionHistory.length > 0" @click="goBack()"
+                        class="text-gray-600 hover:text-gray-800 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>Вернуться к предыдущему вопросу
+                    </button>
+                </div>
+
+                <!-- Состояние: результат -->
+                <div x-show="diagnosisResult" class="page-transition">
+                    <div class="text-center mb-8">
+                        <div
+                            class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 text-red-600 mb-4">
+                            <i class="fas fa-stethoscope text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Диагностика завершена</h3>
+                        <p class="text-gray-600">Вот что мы определили:</p>
+                    </div>
+
+                    <!-- Результат -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-clipboard-check text-green-600 mr-2"></i>Рекомендация
+                        </h4>
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p class="text-gray-800 leading-relaxed" x-text="diagnosisResult.recommendation_text"></p>
+                        </div>
+                    </div>
+
+                    <!-- Общие советы -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-6">
+                        <h4 class="font-bold text-blue-800 mb-3 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i>Полезные советы
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-tint text-blue-500 mt-1 mr-2"></i>
+                                <span>Поливайте, когда верхний слой почвы просох на 2-3 см</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-sun text-blue-500 mt-1 mr-2"></i>
+                                <span>Большинству растений нужен яркий рассеянный свет</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-wind text-blue-500 mt-1 mr-2"></i>
+                                <span>Избегайте сквозняков и резких перепадов температуры</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-spa text-blue-500 mt-1 mr-2"></i>
+                                <span>Удобряйте в период активного роста (весна-лето)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Кнопки -->
+                    <div class="flex space-x-3">
+                        <button @click="startNewDiagnosis()"
+                            class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition">
+                            <i class="fas fa-redo mr-2"></i>Новая диагностика
+                        </button>
+                        <button @click="currentPage = 'encyclopedia'"
+                            class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition">
+                            <i class="fas fa-book mr-2"></i>В энциклопедию
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Индикатор загрузки (общий для всех страниц) -->
             <div x-show="loading === true" class="text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600">
@@ -1084,6 +1219,12 @@
                                             <span>Открыть статью в Рувики</span>
                                             <i class="fas fa-external-link-alt ml-2 text-sm"></i>
                                         </a>
+                                        <button @click="openInBrowser(currentPlantInfo?.wiki_url)"
+                                            class="wiki-link inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition cursor-pointer">
+                                            <i class="fab fa-wikipedia-w mr-2"></i>
+                                            <span>Открыть статью в Рувики</span>
+                                            <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                        </button>
                                         <p class="text-xs text-blue-500 mt-2">
                                             <i class="fas fa-info-circle mr-1"></i>
                                             Откроется в браузере
@@ -1141,6 +1282,14 @@
 
                     // Поиск в энциклопедии
                     encyclopediaSearch: '',
+
+                    // Доктор растений
+                    currentQuestion: null,
+                    currentQuestionAnswers: [],
+                    questionHistory: [],
+                    diagnosisResult: null,
+                    currentQuestionNumber: 1,
+                    diagnosisProgress: 0,
 
                     // Данные для нового растения
                     newPlant: {
@@ -1545,6 +1694,37 @@
                         } else {
                             this.notificationStatus = message;
                             setTimeout(() => this.notificationStatus = '', 3000);
+                        }
+                    },
+
+                    // Открытие внешних ссылок через Telegram API или обычный браузер
+                    openInBrowser(url) {
+                        if (!url) {
+                            console.warn('URL для открытия не указан');
+                            return;
+                        }
+
+                        console.log('🔄 Открываем ссылку:', url);
+
+                        // 1. Пробуем использовать Telegram WebApp API
+                        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) {
+                            try {
+                                console.log('✅ Используем Telegram.WebApp.openLink()');
+                                Telegram.WebApp.openLink(url);
+                                return; // Выходим, если успешно
+                            } catch (error) {
+                                console.error('Ошибка Telegram API:', error);
+                            }
+                        }
+
+                        // 2. Fallback: открываем в новой вкладке
+                        console.log('⚠️ Используем fallback (window.open)');
+                        window.open(url, '_blank', 'noopener,noreferrer');
+
+                        // 3. Дополнительный fallback для очень старых браузеров
+                        if (!window.open) {
+                            console.log('⚠️ window.open не поддерживается, используем location');
+                            window.location.href = url;
                         }
                     },
 
@@ -2088,9 +2268,9 @@
                             const { data, error } = await window.supabase
                                 .from('plants')
                                 .select(`
-                *,
-                plant_species(name, description)
-            `)
+                                            *,
+                                            plant_species(name, description)
+                                        `)
                                 .eq('user_id', this.user.id)
                                 .order('next_watering');
 
@@ -2392,6 +2572,134 @@
                         }
 
                         return filtered;
+                    },
+
+                    // Начать диагностику
+                    async startDiagnosis() {
+                        try {
+                            // Загружаем первый вопрос
+                            const { data: questions, error } = await window.supabase
+                                .from('plant_doctor_questions')
+                                .select('*')
+                                .order('display_order')
+                                .limit(1);
+
+                            if (error) throw error;
+
+                            if (questions && questions.length > 0) {
+                                this.currentQuestion = questions[0];
+                                await this.loadAnswersForQuestion(this.currentQuestion.id);
+                                this.diagnosisProgress = 20;
+                            }
+
+                        } catch (error) {
+                            console.error('Ошибка загрузки вопросов:', error);
+                            this.notificationStatus = 'Ошибка загрузки вопросов';
+                        }
+                    },
+
+                    // Загрузить ответы для вопроса
+                    async loadAnswersForQuestion(questionId) {
+                        try {
+                            const { data: answers, error } = await window.supabase
+                                .from('plant_doctor_answers')
+                                .select('*')
+                                .eq('question_id', questionId)
+                                .order('display_order');
+
+                            if (error) throw error;
+
+                            this.currentQuestionAnswers = answers || [];
+
+                        } catch (error) {
+                            console.error('Ошибка загрузки ответов:', error);
+                        }
+                    },
+
+                    // Выбрать ответ
+                    async selectAnswer(answer) {
+                        // Сохраняем текущий вопрос в историю
+                        this.questionHistory.push({
+                            question: this.currentQuestion,
+                            answer: answer
+                        });
+
+                        // Если есть рекомендация - завершаем
+                        if (answer.recommendation_text) {
+                            this.diagnosisResult = {
+                                recommendation_text: answer.recommendation_text
+                            };
+                            this.currentQuestion = null;
+                            this.diagnosisProgress = 100;
+                            return;
+                        }
+
+                        // Если есть следующий вопрос - загружаем его
+                        if (answer.next_question_id) {
+                            try {
+                                const { data: nextQuestion, error } = await window.supabase
+                                    .from('plant_doctor_questions')
+                                    .select('*')
+                                    .eq('id', answer.next_question_id)
+                                    .single();
+
+                                if (error) throw error;
+
+                                this.currentQuestion = nextQuestion;
+                                this.currentQuestionNumber++;
+                                await this.loadAnswersForQuestion(nextQuestion.id);
+
+                                // Обновляем прогресс
+                                this.diagnosisProgress = Math.min(100, 20 + (this.currentQuestionNumber * 20));
+
+                            } catch (error) {
+                                console.error('Ошибка загрузки следующего вопроса:', error);
+                                this.notificationStatus = 'Ошибка загрузки вопроса';
+                            }
+                        } else {
+                            // Если нет следующего вопроса и нет рекомендации - что-то пошло не так
+                            this.diagnosisResult = {
+                                recommendation_text: 'Пожалуйста, попробуйте начать диагностику заново.'
+                            };
+                            this.currentQuestion = null;
+                        }
+                    },
+
+                    // Вернуться назад
+                    async goBack() {
+                        if (this.questionHistory.length === 0) return;
+
+                        // Берем последний вопрос из истории
+                        const last = this.questionHistory.pop();
+                        this.currentQuestion = last.question;
+                        this.currentQuestionNumber--;
+                        await this.loadAnswersForQuestion(last.question.id);
+
+                        // Обновляем прогресс
+                        this.diagnosisProgress = Math.max(20, 20 + (this.currentQuestionNumber * 20));
+                    },
+
+                    // Новая диагностика
+                    startNewDiagnosis() {
+                        this.currentQuestion = null;
+                        this.currentQuestionAnswers = [];
+                        this.questionHistory = [];
+                        this.diagnosisResult = null;
+                        this.currentQuestionNumber = 1;
+                        this.diagnosisProgress = 0;
+                    },
+
+                    // Вычисляемое свойство для оставшихся вопросов 
+                    get estimatedQuestionsLeft() {
+                        if (!this.currentQuestion) return '?';
+                        const estimated = Math.max(1, 5 - this.currentQuestionNumber);
+                        return estimated + ' ' + this.declension(estimated, ['вопрос', 'вопроса', 'вопросов']);
+                    },
+
+                    // Склонение числительных
+                    declension(number, titles) {
+                        const cases = [2, 0, 1, 1, 1, 2];
+                        return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
                     },
 
                     // Вспомогательные функции для отображения
