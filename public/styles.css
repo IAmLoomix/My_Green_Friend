@@ -1,0 +1,228 @@
+:root {
+    --primary-color: #10b981;
+    --secondary-color: #059669;
+}
+
+.plant-card {
+    transition: transform 0.2s;
+}
+
+.plant-card:hover {
+    transform: translateY(-2px);
+}
+
+.urgent {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Стили для карточки энциклопедии */
+.plant-info-card {
+    border-left: 4px solid #10b981;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+/* Стили для бургер-меню */
+.burger-menu {
+    transition: all 0.3s ease;
+}
+
+.burger-line {
+    transition: all 0.3s ease;
+}
+
+.burger-menu.open .burger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.burger-menu.open .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.open .burger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.sidebar-menu {
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+.sidebar-menu.open {
+    transform: translateX(0);
+}
+
+.page-transition {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивные стили для мобильных */
+@media (max-width: 640px) {
+    .encyclopedia-modal {
+        margin: 0;
+        max-height: 95vh;
+        border-radius: 0;
+    }
+
+    .encyclopedia-content {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .plant-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .sidebar-menu {
+        width: 85%;
+    }
+}
+
+/* Для планшетов */
+@media (min-width: 641px) and (max-width: 768px) {
+    .plant-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sidebar-menu {
+        width: 350px;
+    }
+}
+
+/* Стили для карточек растений в энциклопедии */
+.encyclopedia-plant-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.encyclopedia-plant-card:hover {
+    border-color: #10b981;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -1px rgba(16, 185, 129, 0.06);
+    transform: translateY(-2px);
+}
+
+.wiki-link {
+    transition: all 0.3s ease;
+    border: 1px solid #3b82f6;
+}
+
+.wiki-link:hover {
+    background-color: #eff6ff;
+    border-color: #1d4ed8;
+}
+
+/* Активная страница */
+.active-page {
+    background-color: #f0fdf4;
+    border-left: 4px solid #10b981;
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Заглушки для будущих разделов */
+
+.sidebar-menu {
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+    z-index: 50;
+}
+
+.sidebar-menu.open {
+    transform: translateX(0);
+}
+
+/* Стили для измерителя освещённости */
+.light-meter-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: 1px solid #334155;
+    border-radius: 18px;
+    color: #e5e7eb;
+}
+
+.light-meter-loader {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 4px solid #334155;
+    border-top-color: #22c55e;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.light-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.light-result-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    color: #e5e7eb;
+}
+
+/* Убедитесь, что для мобильных: */
+@media (max-width: 640px) {
+    .sidebar-menu {
+        width: 85%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+    }
+}
+
+.preserve-linebreaks {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
