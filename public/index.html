@@ -16,7 +16,8 @@
     <script src="./supabase-client.js"></script>
 
     <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Tailwind CSS (для быстрых стилей) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -157,7 +158,7 @@
                             <div class="text-lg font-bold text-green-700 mt-2">Мой зелёный друг</div>
                         </div>
                         <p class="text-sm text-gray-500">Школьный проект "Полёт"</p>
-                        <p class="text-xs text-gray-400 mt-2">Версия 0.9.0</p>
+                        <p class="text-xs text-gray-400 mt-2">Версия 1.0</p>
                     </div>
                 </div>
             </div>
@@ -1061,12 +1062,6 @@
                                     </h4>
                                     <p class="text-blue-700 text-sm mb-3">Полная статья о растении в русской
                                         энциклопедии</p>
-                                    <a :href="currentPlantInfo?.wiki_url" target="_blank"
-                                        class="wiki-link inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:no-underline">
-                                        <i class="fab fa-wikipedia-w mr-2"></i>
-                                        <span>Открыть статью в Рувики</span>
-                                        <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                                    </a>
                                     <button @click="openInBrowser(currentPlantInfo?.wiki_url)"
                                         class="wiki-link inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition cursor-pointer">
                                         <i class="fab fa-wikipedia-w mr-2"></i>
@@ -1088,7 +1083,7 @@
         <!-- Футер -->
         <footer class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
             <p>🌿 Мой зелёный друг • Школьный проект "Полёт"</p>
-            <p>Версия 0.9.0</p>
+            <p>Версия 1.0</p>
             <p>Уведомления: ежедневно в 10:00</p>
             <p class="mt-2">Растений в энциклопедии: <span x-text="plantEncyclopedia.length"></span> видов
             </p>
@@ -2173,6 +2168,11 @@
                     if (this.filter === 'today') return this.plants.filter(p => p.days_until <= 0);
                     if (this.filter === 'tomorrow') return this.plants.filter(p => p.days_until === 1);
                     return this.plants;
+                },
+
+                clearRelatedFilter() {
+                    this.marketplaceFilter = 'all';
+                    this.relatedProductsFilter = null;
                 },
 
                 // Выбор вида растения
